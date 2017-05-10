@@ -1,0 +1,47 @@
+<SCREEN>
+    <GRIDMESH>
+        <GRIDX>1</GRIDX>
+        <GRIDY>1</GRIDY>
+    </GRIDMESH>
+    <BOUNDINGBOX>
+        <ulx>0.0</ulx>
+        <uly>0.0</uly>
+        <lrx>1.0</lrx>
+        <lry>1.0</lry>
+    </BOUNDINGBOX>
+    <POINT>
+        <X>0.000000</X>
+        <Y>0.000000</Y>
+    </POINT>
+    <POINT>
+        <X>320.000000</X>
+        <Y>0.000000</Y>
+    </POINT>
+    <POINT>
+        <X>0.000000</X>
+        <Y>240.000000</Y>
+    </POINT>
+    <POINT>
+        <X>320.000000</X>
+        <Y>240.000000</Y>
+    </POINT>
+    
+</SCREEN>
+<WARP>
+    <BOTTOMLEFT>
+        <X>0.000000</X>
+        <Y>240.000000</Y>
+    </BOTTOMLEFT>
+    <BOTTOMRIGHT>
+        <X>320.000000</X>
+        <Y>240.000000</Y>
+    </BOTTOMRIGHT>
+    <TOPRIGHT>
+        <X>320.000000</X>
+        <Y>0.000000</Y>
+    </TOPRIGHT>
+    <TOPLEFT>
+        <X>0.000000</X>
+        <Y>0.000000</Y>
+    </TOPLEFT>
+</WARP>
