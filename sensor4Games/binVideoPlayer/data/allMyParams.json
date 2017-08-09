@@ -7,8 +7,17 @@
             "bContourFinderThreshold" : "0",
             "bLearnBackground" : "1",
             "bSimpleBackgroundSubstraction" : "0",
-            "learningTime" : "23.721",
-            "thresholdValue" : "18.412"
+            "blur" : "0",
+            "dilate" : "0",
+            "erode" : "0",
+            "learningTime" : "74.128",
+            "maxDistanceTracking" : "100",
+            "maxPersistenceTracking" : "100",
+            "maxSizeBlob" : "242",
+            "minSizeBlob" : "15",
+            "postBlur" : "6",
+            "selectedThersholdMethodId" : "0",
+            "thresholdValue" : "18.685"
          }
       }
    },
@@ -20,7 +29,16 @@
             "bContourFinderThreshold" : "0",
             "bLearnBackground" : "0",
             "bSimpleBackgroundSubstraction" : "0",
+            "blur" : "0",
+            "dilate" : "0",
+            "erode" : "0",
             "learningTime" : "5.93",
+            "maxDistanceTracking" : "0",
+            "maxPersistenceTracking" : "0",
+            "maxSizeBlob" : "0",
+            "minSizeBlob" : "0",
+            "postBlur" : "0",
+            "selectedThersholdMethodId" : "0",
             "thresholdValue" : "17.491"
          }
       }
@@ -29,10 +47,10 @@
       "sensorParams" : {
          "1" : {
             "bAreaActive" : "1",
-            "rectAreaH" : "390.698",
-            "rectAreaW" : "275.349",
-            "rectAreaX" : "22.326",
-            "rectAreaY" : "50.233"
+            "rectAreaH" : "357.209",
+            "rectAreaW" : "394.419",
+            "rectAreaX" : "81.86",
+            "rectAreaY" : "41.86"
          }
       }
    }
