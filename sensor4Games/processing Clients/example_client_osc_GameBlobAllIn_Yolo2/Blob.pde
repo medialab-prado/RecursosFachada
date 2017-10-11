@@ -3,7 +3,7 @@ class Blob {
   float yPos;
   int id; 
   int time; 
-  
+  float probability;
   //TODO velx, vely
   float wScale, hScale;
 
@@ -15,7 +15,7 @@ class Blob {
     yPos = -1;
     id = -1; //Id will be the order received or ID from tracking
     time = -1; //time -1 if not tracking
-
+    probability = 0;
     //TODO add Velocity vector
     //TODO add Area info
   }
@@ -41,7 +41,7 @@ class Blob {
     fill(255, 0, 0, 150);
     stroke(255, 255, 255, 150);
     strokeWeight(2);  // Thicker
-    ellipse(xPos*wScale, yPos*hScale, 10, 10);
+    ellipse(xPos*wScale, yPos*hScale, 50*probability, 50*probability);
 
 
     fill(200, 0, 0, 250);
