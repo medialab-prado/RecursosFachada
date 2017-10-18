@@ -4,6 +4,7 @@
  * oscP5 website at http://www.sojamo.de/oscP5
  */
 
+import processing.awt.PSurfaceAWT;
 
 PFont f;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -15,9 +16,19 @@ Boolean bDrawInfo = false;
 Boolean bBackgroundAlpha = false;
 int alphaBk = 200;
 
+
+
 void setup() {
- 
-  fullScreen();
+
+  size(400,400);
+  PSurfaceAWT awtSurface = (PSurfaceAWT)surface;
+  PSurfaceAWT.SmoothCanvas smoothCanvas = (PSurfaceAWT.SmoothCanvas)awtSurface.getNative();
+  smoothCanvas.getFrame().setAlwaysOnTop(true);
+  smoothCanvas.getFrame().removeNotify();
+  smoothCanvas.getFrame().setUndecorated(true);
+  smoothCanvas.getFrame().setLocation(0, 0);//2560
+  smoothCanvas.getFrame().addNotify();
+  //fullScreen();
   colorMode(HSB, 360, 255, 255);
 
   frameRate(25);
@@ -32,14 +43,13 @@ void setup() {
 
 
 void draw() {
-  if(bBackgroundAlpha){
+  if (bBackgroundAlpha) {
     fill(0, 0, 0, alphaBk);
     rectMode(CORNER);
-    rect(0,0, 192+40, 157+40);
-  }
-  else background(0, 0, 0);
-  
-  
+    rect(0, 0, 192+40, 157+40);
+  } else background(0, 0, 0);
+
+  strokeWeight(1);
   stroke(0, 255, 255); //RGB Contour Color. https://processing.org/reference/stroke_.html
   drawFacadeContourInside(); //Facade Contour
 
@@ -48,15 +58,14 @@ void draw() {
   text("Client example receiving Blobs at localhost port:12345", 0, height-0.05*height);
   text("FrameRate --> "+str(frameRate), 0, height-0.1*height);
 
-pushMatrix();
+  pushMatrix();
   translate(40, 40 + 32);
   noFill();
   stroke(0, 255, 255);
 
   fill(0, 255, 0);
   draw_clientSensor4Games(widthDesiredScale, heightDesiredScale - 32, scaleRawSize, bDrawInfo);
-popMatrix();
- 
+  popMatrix();
 }
 
 //-----------------------------------
@@ -109,7 +118,8 @@ void keyPressed() {
 
   if (keyCode==BACKSPACE)bDrawInfo = !bDrawInfo;
   if (key == 'b' || key == 'B')bBackgroundAlpha = !bBackgroundAlpha;
-  if (keyCode == LEFT)alphaBk += 10; if(alphaBk>255) alphaBk = 255;
-  if (keyCode == RIGHT)alphaBk -= 10; if(alphaBk<1) alphaBk = 1;
-  
+  if (keyCode == LEFT)alphaBk += 10; 
+  if (alphaBk>255) alphaBk = 255;
+  if (keyCode == RIGHT)alphaBk -= 10; 
+  if (alphaBk<1) alphaBk = 1;
 }

@@ -36,7 +36,7 @@ class Blob {
 
     textAlign(LEFT);
     //Draw Received Blob. Probability = quality person detection.
-    int idColor = id % 255;
+    int idColor = id*100 % 255;
     fill(idColor, 255, 255, 255*probability);
     //stroke(255, 255, 255, 255);
     noStroke();
