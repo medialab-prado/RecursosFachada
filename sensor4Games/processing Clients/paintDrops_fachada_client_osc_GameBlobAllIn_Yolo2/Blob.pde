@@ -3,7 +3,7 @@ class Blob {
   float yPos;
   int id; 
   int time; 
-  float probability;
+  //float probability;
   float wRawBlob;
   float hRawBlob;
   //TODO velx, vely
@@ -14,7 +14,7 @@ class Blob {
     yPos = -1;
     id = -1; //Id will be the order received or ID from tracking
     time = -1; //time -1 if not tracking
-    probability = 0;
+    //probability = 0;
     //TODO add Velocity vector
     //TODO add Area info
   }
@@ -37,7 +37,7 @@ class Blob {
     textAlign(LEFT);
     //Draw Received Blob. Probability = quality person detection.
     int idColor = id*100 % 255;
-    fill(idColor, 255, 255, 255*probability);
+    fill(idColor, 255, 255, 200);
     //stroke(255, 255, 255, 255);
     noStroke();
     strokeWeight(2);  // Thicker
@@ -45,7 +45,7 @@ class Blob {
       rectMode(CENTER);  // Set rectMode to CENTER
       rect(xPos*w, yPos*h, wRawBlob*_scaleRawDims, hRawBlob*_scaleRawDims);
     }
-    else ellipse(xPos*w, yPos*h, 50*probability, 50*probability);
+    else ellipse(xPos*w, yPos*h, 50, 50);
 
 
     //Draw Info

@@ -48,7 +48,7 @@ void oscEvent(OscMessage theOscMessage) {
 
     //Read and save OSC info
     for (int i = 0; i< numBlobs; i++) {
-      int nItms = 7; // 5 items per received pakage. 
+      int nItms = 6; // X items per received pakage. 
       //if (theOscMessage.checkTypetag("ffff")) {
       float posBlobX = theOscMessage.get(1+i*nItms+0).floatValue(); // X position [0..1]
       float posBlobY = theOscMessage.get(1+i*nItms+1).floatValue();  // Y position [0..1]
@@ -56,7 +56,7 @@ void oscEvent(OscMessage theOscMessage) {
       float sizeBlobH = theOscMessage.get(1+i*nItms+3).floatValue();  // Y position [0..1] 
       int idBlob     = theOscMessage.get(1+i*nItms+4).intValue();
       int timeBlob   = theOscMessage.get(1+i*nItms+5).intValue();
-      float probBlob = theOscMessage.get(1+i*nItms+6).floatValue();
+      //float probBlob = theOscMessage.get(1+i*nItms+6).floatValue();
 
       //println("PRE blob("+str(idBlob)+") receive["+str(i)+"] x="+str(posBlobX)+" y="+str(posBlobY));
 
@@ -68,7 +68,7 @@ void oscEvent(OscMessage theOscMessage) {
       auxBlob.hRawBlob = sizeBlobH;
       auxBlob.id = idBlob;
       auxBlob.time = timeBlob;
-      auxBlob.probability = probBlob; 
+      //auxBlob.probability = probBlob; 
 
       synchronized (blobs) {
         blobs.add(auxBlob);
