@@ -7,7 +7,6 @@
 var http = require('http');
 var io = require('socket.io');
 var express = require('express')
- , form = require('connect-form')
  , path = require('path'); 
 var osc = require('node-osc');
 
@@ -35,7 +34,7 @@ var msgsArray=[]
 var initTime=0;
 app.configure(function(){
   app.use("/public", express.static(path.join(__dirname, 'public')));
-  form({ keepExtensions: true })
+  
 }); 
     
 /* 
@@ -114,7 +113,7 @@ oscServer.on("message", function (msg, rinfo) {
     diffTime=now-initTime 
   }
   
-  console.log(msg);
+  //console.log(msg);
   var blobsJson=[]
   //blobsJson.push( {'time':diffTime }) //timestamp
   for (var i=2; i<msg.length; i+=1){

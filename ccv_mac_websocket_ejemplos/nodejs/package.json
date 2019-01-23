@@ -1,0 +1,18 @@
+{
+  "name": "mlp_tuio2websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mpl_camera.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-form": "^0.2.1",
+    "express": "^3.18.3",
+    "expresss": "0.0.0",
+    "node-osc": "^3.0.0",
+    "socket.io": "^2.2.0"
+  }
+}
