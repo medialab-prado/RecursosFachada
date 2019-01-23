@@ -1,0 +1,19 @@
+<group>
+	<bVideoPlayer>0</bVideoPlayer>
+	<Device_Id_>0</Device_Id_>
+	<bSwapX>1</bSwapX>
+	<bSwapY>0</bSwapY>
+	<CropX>0.17</CropX>
+	<CropY>0.155</CropY>
+	<CropW>0.545</CropW>
+	<CropH>0.58</CropH>
+	<Draw_Yolo_Info>0</Draw_Yolo_Info>
+	<Label>person</Label>
+	<Probability>0.25</Probability>
+	<Max_Overlap>0.25</Max_Overlap>
+	<trackerPersistence>17.66</trackerPersistence>
+	<trackerMaxDistance>69.655</trackerMaxDistance>
+	<trackerSmoothingRate>0.3</trackerSmoothingRate>
+<group/>
+<Filtered_Label>person</Filtered_Label>
+</group>

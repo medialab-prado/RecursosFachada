@@ -1,0 +1,156 @@
+;////////////////////////////////////////////////////////////////////////////////
+;//
+;//                           (C) PCTV Systems 2010
+;//      All rights are reserved.  Reproduction in whole or in part is prohibited
+;//      without the written consent of the copyright owner.
+;//
+;//      PCTV Systems reserves the right to make changes without notice at any time.
+;//      PCTV Systems makes no warranty, expressed, implied or statutory, including
+;//      but not limited to any implied warranty of merchantibility of fitness
+;//      for any particular purpose, or that the use will not infringe any
+;//      third party patent, copyright or trademark.
+;//      PCTV Systems must not be liable for any loss or damage arising from its use.
+;//
+;////////////////////////////////////////////////////////////////////////////////
+
+;----------------------------------------------------------------------------------------------------
+;
+; PCTVEMPV.inf   -- This file contains installation information for
+;                         PCTV 100e/150e
+;                         PCTV Hybrid Pro* Stick Audio" (PCTV 320e)
+;
+; Copyright (c) 2009-2010 PCTV Systems
+;----------------------------------------------------------------------------------------------------
+
+[Version]
+Signature   = "$CHICAGO$"
+Class       = MEDIA
+ClassGUID   = {4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider    = %Vendor%
+CatalogFile = PCTVEMP64.cat
+DriverVer   = 09/01/2010, 5.2010.0901.0
+DriverPackageType=PlugAndPlay
+DriverPackageDisplayName="PCTV 100e/150e/320e Audio" 
+
+
+[SourceDisksNames]
+1 = %DiskLabel%,emAudio64.sys,,
+
+[SourceDisksFiles]
+emAudio64.sys = 1
+
+[Manufacturer]
+%Mfg%=PCTVSYSTEMS, NTamd64
+
+[PCTVSYSTEMS.NTamd64]
+
+%emAudio.DeviceDesc%=emAudio, USB\VID_2304&PID_0208&MI_01   ; PCTV 100e
+%emAudio.DeviceDesc%=emAudio, USB\VID_EB1A&PID_2821&MI_01   ; PCTV 100e
+%emAudio.DeviceDesc%=emAudio, USB\VID_EB1A&PID_2881&MI_01   ; PCTV 320
+
+[DestinationDirs]
+emAudio.CopyList=10,system32\drivers
+
+[emAudio]
+AlsoInstall= ks.registration(ks.inf),wdmaudio.registration(wdmaudio.inf)
+CopyFiles  = emAudio.CopyList
+AddReg     = emAudio.AddReg
+
+[emAudio.CopyList]
+emAudio64.sys
+
+[emAudio.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO%,      %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface = %KSCATEGORY_RENDER%,     %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface = %KSCATEGORY_CAPTURE%,    %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface = %KSCATEGORY_AUDIOCAP%,   %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface = %KSCATEGORY_AUDIO%,      %KSNAME_Topology%, emAudio.I.Topo
+AddInterface = %KSCATEGORY_RENDER%,     %KSNAME_Topology%, emAudio.I.Topo
+AddInterface = %KSCATEGORY_CAPTURE%,    %KSNAME_Topology%, emAudio.I.Topo
+AddInterface = %KSCATEGORY_AUDIOCAP%,   %KSNAME_Topology%, emAudio.I.Topo
+
+
+[emAudio.AddReg]
+HKR,,AssociatedFilters,,"wdmaud"
+HKR,,Driver,,emAudio64.sys
+HKR,,NTMPDriver,,"emAudio64.sys"
+;; HKR,,NTMPDriver,,"emAudio64.sys,sbemul.sys"
+HKR,Drivers,SubClasses,,"wave, mixer"
+HKR,Drivers\wave\wdmaud.drv,Driver,,wdmaud.drv
+HKR,Drivers\mixer\wdmaud.drv,Driver,,wdmaud.drv
+HKR,Drivers\wave\wdmaud.drv,Description,,%emAudio.DeviceDesc%
+HKR,Drivers\mixer\wdmaud.drv,Description,,%emAudio.DeviceDesc%
+HKLM,%MediaCategories%\%emAudio.NameGuid%,Name,,%emAudio.Name%
+HKLM,%Audio.Key%,"DeviceName",0,%emAudio.DeviceDesc%
+HKR,,SurpriseRemovalOK, 0x00010001, 1
+
+
+[emAudio.I.Wave]
+AddReg=emAudio.I.Wave.AddReg
+
+[emAudio.I.Wave.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,%emAudio.Wave.szPname%
+
+[emAudio.I.Topo]
+AddReg=emAudio.I.Topo.AddReg
+
+[emAudio.I.Topo.AddReg]
+HKR,,CLSID,,%Proxy.CLSID%
+HKR,,FriendlyName,,%emAudio.Topo.szPname%
+
+
+[emAudio.NTamd64]
+Include=ks.inf,wdmaudio.inf
+Needs=KS.Registration, WDMAUDIO.Registration
+CopyFiles = emAudio.CopyList
+AddReg    = emAudio.AddReg
+
+
+[emAudio.NTamd64.Interfaces]
+AddInterface    = %KSCATEGORY_AUDIO%,   %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface    = %KSCATEGORY_RENDER%,  %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface    = %KSCATEGORY_CAPTURE%, %KSNAME_Wave%,     emAudio.I.Wave
+AddInterface    = %KSCATEGORY_AUDIOCAP%,%KSNAME_Wave%,     emAudio.I.Wave
+AddInterface    = %KSCATEGORY_AUDIO%,   %KSNAME_Topology%, emAudio.I.Topo
+
+[emAudio.NTamd64.Services]
+include         = wdmaudio.inf
+needs           = wdmaudio.registration.services
+AddService      = emAudio, 0x00000002, emAudio_Service_Inst
+
+[emAudio_Service_Inst]
+DisplayName     = %emAudio.DeviceDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %10%\system32\drivers\emAudio64.sys
+
+
+[Strings]
+;---------------
+;Non-Localizable
+;---------------
+KSNAME_Wave          = "Wave"
+KSNAME_Topology      = "Topology"
+Proxy.CLSID          = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+KSCATEGORY_AUDIO     = "{6994AD04-93EF-11D0-A3CC-00A0C9223196}"
+KSCATEGORY_RENDER    = "{65E8773E-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_CAPTURE   = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_AUDIOCAP  = "{33D9A762-90C8-11D0-BD43-00A0C911CE86}"
+emAudio.NameGuid     = "{946A7B1A-EBBC-422a-A81F-F07C8D40D3B4}"
+MediaCategories      = "SYSTEM\CurrentControlSet\Control\MediaCategories"
+Audio.Key            = "Software\USB2800\Audio"
+
+;---------------
+;Localizable
+;---------------
+Vendor               = "PCTV Systems"
+DiskLabel            = "PCTV EMP Driver Disk"
+Mfg                  = "PCTV EMP Audio"
+emAudio.DeviceDesc   = "PCTV EMP Audio Device"
+emAudio.Topo.szPname = "PCTV EMP Audio Topology"
+emAudio.Wave.szPname = "PCTV EMP Audio Device"
+emAudio_MIDI         = "PCTV EMP MIDI Device"
+emAudio.Name         = "PCTV EMP Audio Device"
+

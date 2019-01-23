@@ -2,13 +2,22 @@
    {
       "ControllerReconition" : {
          "1" : {
-            "bAutoThreshold" : "1",
+            "bAutoThreshold" : "0",
             "bContourFinderColorThreshold" : "0",
             "bContourFinderThreshold" : "0",
             "bLearnBackground" : "1",
-            "bSimpleBackgroundSubstraction" : "1",
-            "learningTime" : "83.023",
-            "thresholdValue" : "10"
+            "bSimpleBackgroundSubstraction" : "0",
+            "blur" : "0",
+            "dilate" : "0",
+            "erode" : "0",
+            "learningTime" : "74.128",
+            "maxDistanceTracking" : "100",
+            "maxPersistenceTracking" : "100",
+            "maxSizeBlob" : "242",
+            "minSizeBlob" : "15",
+            "postBlur" : "6",
+            "selectedThersholdMethodId" : "0",
+            "thresholdValue" : "18.685"
          }
       }
    },
@@ -18,25 +27,31 @@
             "bAutoThreshold" : "0",
             "bContourFinderColorThreshold" : "0",
             "bContourFinderThreshold" : "0",
-            "bLearnBackground" : "1",
-            "bSimpleBackgroundSubstraction" : "1",
+            "bLearnBackground" : "0",
+            "bSimpleBackgroundSubstraction" : "0",
+            "blur" : "0",
+            "dilate" : "0",
+            "erode" : "0",
             "learningTime" : "5.93",
-            "thresholdValue" : "23.841"
+            "maxDistanceTracking" : "0",
+            "maxPersistenceTracking" : "0",
+            "maxSizeBlob" : "0",
+            "minSizeBlob" : "0",
+            "postBlur" : "0",
+            "selectedThersholdMethodId" : "0",
+            "thresholdValue" : "17.491"
          }
       }
    },
    {
       "sensorParams" : {
-         "bArea1" : "1",
-         "bArea2" : "1",
-         "rectArea1H" : "128.372",
-         "rectArea1W" : "171.163",
-         "rectArea1X" : "171.163",
-         "rectArea1Y" : "128.372",
-         "rectArea2H" : "234.419",
-         "rectArea2W" : "357.209",
-         "rectArea2X" : "141.395",
-         "rectArea2Y" : "100.465"
+         "1" : {
+            "bAreaActive" : "1",
+            "rectAreaH" : "357.209",
+            "rectAreaW" : "394.419",
+            "rectAreaX" : "81.86",
+            "rectAreaY" : "41.86"
+         }
       }
    }
 ]

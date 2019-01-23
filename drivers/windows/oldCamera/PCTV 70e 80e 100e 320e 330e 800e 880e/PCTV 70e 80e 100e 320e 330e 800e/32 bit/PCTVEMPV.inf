@@ -1,0 +1,1313 @@
+;////////////////////////////////////////////////////////////////////////////////
+;//
+;//                           (C) PCTV Systems 2010
+;//      All rights are reserved.  Reproduction in whole or in part is prohibited
+;//      without the written consent of the copyright owner.
+;//
+;//      PCTV Systems reserves the right to make changes without notice at any time.
+;//      PCTV Systems makes no warranty, expressed, implied or statutory, including
+;//      but not limited to any implied warranty of merchantibility of fitness
+;//      for any particular purpose, or that the use will not infringe any
+;//      third party patent, copyright or trademark.
+;//      PCTV Systems must not be liable for any loss or damage arising from its use.
+;//
+;////////////////////////////////////////////////////////////////////////////////
+
+;----------------------------------------------------------------------------------------------------
+;
+; PCTVEMPV.inf   -- This file contains installation information for
+;                   PCTV 70e
+;                   PCTV 80e
+;                   PCTV 100e/150e
+;                   PCTV 170e
+;                   PCTV 290e
+;                   PCTV 320e            
+;                   PCTV 330e
+;                   PCTV 460e
+;                   PCTV 510e
+;                   PCTV 520e
+;                   PCTV 800e
+;                   PCTV 802e
+;                   PCTV 880e
+;
+; Copyright (c) 2009-2010 PCTV Systems
+;----------------------------------------------------------------------------------------------------
+
+[Version]
+signature   = "$CHICAGO$"
+Class       = Media                                 
+ClassGUID   = {4d36e96c-e325-11ce-bfc1-08002be10318}
+Provider    = %Vendor%
+CatalogFile = PCTVEMP.cat
+DriverVer   = 09/01/2010, 5.2010.0901.0
+DriverPackageType=PlugAndPlay
+DriverPackageDisplayName="PCTV 70e/80e/100e/170e/290e/320e/330e/460e/510e/520e/800e/802e/880e"
+
+[ControlFlags]
+ExcludeFromSelect = *
+
+[SourceDisksNames]
+1 = %DiskLabel%,,,
+
+[SourceDisksFiles]
+emPRP.ax  = 1
+
+emOEM.sys = 1
+emBDA.sys = 1
+emMON.exe = 1
+;merlinC.rom = 1
+merlinFW.rom = 1
+PCLECoInst.dll = 1
+
+[DestinationDirs]
+DefaultDestDir = 11
+CAP.CopyDLL    = 11
+
+CAP.CopySYS    = 10,system32\drivers
+UTL.CopyList   = 10
+CoInstaller.CopyFiles = 11
+
+[Manufacturer]
+%Vendor% = PCTVSYSTEMS
+
+[PCTVSYSTEMS]
+%PCTV70e.DeviceDesc% = USB2870,USB\VID_EB1A&PID_2870                  ; PCTV 70e
+%PCTV70e.DeviceDesc% = USB2870,USB\VID_EB1A&PID_2871&MI_00            ; PCTV 70e
+%PCTV80e.DeviceDesc% = USB2875,USB\VID_2304&PID_023F                  ; PCTV 80e  
+%PCTV80eSE.DeviceDesc% = USB2875,USB\VID_2304&PID_0240                ; PCTV 80e SE
+%PCTV100e.DeviceDesc% = USB2821,USB\VID_2304&PID_0208&MI_00           ; PCTV 100e
+%PCTV170e.DeviceDesc% = USB2865,USB\VID_2304&PID_0232                 ; PCTV 170e
+%PCTV290e.DeviceDesc% = USB2875_290e,USB\VID_2013&PID_024F            ; PCTV 290e
+%PCTV320e.DeviceDesc% = USB2881,USB\VID_EB1A&PID_2881&MI_00           ; PCTV 320e
+%PCTV330e.DeviceDesc% = USB2883_330,USB\VID_2304&PID_0226             ; PCTV 330e
+%PCTV380e.DeviceDesc% = USB2885,USB\VID_2304&PID_0231                 ; PCTV 380e
+%PCTV460e.DeviceDesc% = USB2875_460e,USB\VID_2013&PID_024C            ; PCTV 460e
+%PCTV510e.DeviceDesc% = USB2885,USB\VID_2304&PID_0242                 ; PCTV 510e
+%PCTV520e.DeviceDesc% = USB2885_520e,USB\VID_2013&PID_0251            ; PCTV 520e
+%PCTV800e.DeviceDesc% = USB2883,USB\VID_2304&PID_0227                 ; PCTV 800e
+%PCTV802e.DeviceDesc% = USB2885_802e,USB\VID_2013&PID_0252            ; PCTV 802e
+%PCTV880e.DeviceDesc% = USB2883,USB\VID_2304&PID_0233                 ; PCTV 880e
+
+
+
+;---------------------  U S B 2 8 2 1  --------------------
+
+[USB2821.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2821.NT.HW]
+AddReg = InstFilter2821NT
+
+[InstFilter2821NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+
+;---- I N T E R F A C E S ----
+
+
+[USB2821.NT.Interfaces]
+AddInterface = %KSCATEGORY_VIDEO%,  %WDMCapFilter%,  Capture2821.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,%WDMCapFilter%,  Capture2821.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,%WDMTunerFilter%,TVTuner2821.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,%WDMTVAudFilter%,TVAudio2821.Interface
+AddInterface = %KSCATEGORY_XBAR%,   %WDMXbarFilter%, Xbar2821.Interface
+
+
+[Capture2821.Interface]
+AddReg = Capture.2821.AddReg
+
+[TVTuner2821.Interface]
+AddReg = TVTuner.2821.AddReg
+
+[TVAudio2821.Interface]
+AddReg = TVAudio.2821.AddReg
+
+[Xbar2821.Interface]
+AddReg = Xbar.2821.AddReg
+
+
+[Capture.2821.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Cap.2821.Name%
+HKLM,%Name.Key%,"DSName",0,%Cap.2821.Name%
+
+
+; IAMVideoCompression installed as static interface on both output pins
+HKR,PinFactory\0\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+HKR,PinFactory\1\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+
+[TVTuner.2821.AddReg]
+HKR,,CLSID,,%ProxyTVTuner.CLSID%
+HKR,,FriendlyName,,%TVTuner.2821.Name%
+
+[TVAudio.2821.AddReg]
+HKR,,CLSID,,%ProxyTVAudio.CLSID%
+HKR,,FriendlyName,,%TVAudio.2821.Name%
+
+[Xbar.2821.AddReg]
+HKR,,CLSID,,%ProxyXbar.CLSID%
+HKR,,FriendlyName,,%Xbar.2821.Name%
+
+[CoInstaller2821.AddReg]
+HKR,,CoInstallers32,0x00010000,"PCLECoInst.dll,TronPostInstall"
+
+;------ S E R V I C E S ------
+
+[USB2821.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2821
+AddService = USB28xxOEM,0x00000000,OEMInstall2821
+
+[BDAInstall2821]
+DisplayName   = %USB2821.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2821]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+
+;---------------------  U S B 2 8 6 5  --------------------
+
+[USB2865.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2865.NT.HW]
+AddReg = InstFilter2865NT
+
+[InstFilter2865NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+
+;---- I N T E R F A C E S ----
+
+[USB2865.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO_QCAP%,		%WDMAudioFilter%,Audio2865.Interface
+AddInterface = %KSCATEGORY_AUDIO%,        %WDMAudioFilter%,Audio2865.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,      %WDMAudioFilter%,Audio2865.Interface
+AddInterface = %KSCATEGORY_VIDEO%,       	%WDMCapFilter%,  Capture2865.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     	%WDMCapFilter%,  Capture2865.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     	%WDMTunerFilter%,TVTuner2865.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     	%WDMTVAudFilter%,TVAudio2865.Interface
+AddInterface = %KSCATEGORY_XBAR%,        	%WDMXbarFilter%, Xbar2865.Interface
+
+
+[Audio2865.Interface]
+AddReg = Audio.2865.AddReg
+
+[Capture2865.Interface]
+AddReg = Capture.2865.AddReg
+
+[TVTuner2865.Interface]
+AddReg = TVTuner.2865.AddReg
+
+[TVAudio2865.Interface]
+AddReg = TVAudio.2865.AddReg
+
+[Xbar2865.Interface]
+AddReg = Xbar.2865.AddReg
+
+[Audio.2865.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Audio.2865.Name%
+
+[Capture.2865.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Cap.2865.Name%
+HKLM,%Name.Key%,"DSName",0,%Cap.2865.Name%
+
+
+; IAMVideoCompression installed as static interface on both output pins
+HKR,PinFactory\0\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+HKR,PinFactory\1\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+
+[TVTuner.2865.AddReg]
+HKR,,CLSID,,%ProxyTVTuner.CLSID%
+HKR,,FriendlyName,,%TVTuner.2865.Name%
+
+[TVAudio.2865.AddReg]
+HKR,,CLSID,,%ProxyTVAudio.CLSID%
+HKR,,FriendlyName,,%TVAudio.2865.Name%
+
+[Xbar.2865.AddReg]
+HKR,,CLSID,,%ProxyXbar.CLSID%
+HKR,,FriendlyName,,%Xbar.2865.Name%
+
+
+;------ S E R V I C E S ------
+
+[USB2865.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2865
+AddService = USB28xxOEM,0x00000000,OEMInstall2865
+
+[BDAInstall2865]
+DisplayName   = %USB2865.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2865]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+
+;---------------------  U S B 2 8 7 0  --------------------
+
+[USB2870.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2870.NT.HW]
+AddReg = InstFilter2870NT
+
+[InstFilter2870NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+
+;---- I N T E R F A C E S ----
+
+
+[USB2870.NT.Interfaces]
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,%BDACapFilter%,  BDACap2870.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter%,BDATuner2870.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterC%,BDATuner2870.Interface
+
+
+[BDACap2870.Interface]
+AddReg = BDACap.2870.AddReg
+
+[BDATuner2870.Interface]
+AddReg = BDATuner.2870.AddReg
+
+[BDACap.2870.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDACap.2870.Name%
+HKLM,%Name.Key%,"DSName",0,%BDACap.2870.Name%
+
+
+[BDATuner.2870.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATuner.2870.Name%
+
+
+;------ S E R V I C E S ------
+
+[USB2870.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2870
+AddService = USB28xxOEM,0x00000000,OEMInstall2870
+
+[BDAInstall2870]
+DisplayName   = %USB2870.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2870]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+
+
+;---------------------  U S B 2 8 7 5  --------------------
+
+
+
+[USB2875.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_USB2875.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2875.NT.HW]
+AddReg = InstFilter2875NT
+
+[USB2875_290e.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_USB2875.AddReg, OEM_290e.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2875_460e.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_USB2875.AddReg, OEM_460e.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2875_290e.NT.HW]
+AddReg = InstFilter2875NT
+
+[USB2875_460e.NT.HW]
+AddReg = InstFilter2875NT
+
+[InstFilter2875NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+[USB2875.NT.Interfaces]
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,%BDACapFilter%,  BDACap2875.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter%,BDATuner2875.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterC%,BDATuner2875-C.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter2%,BDATuner2875-2.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterS%,BDATuner2875-S.Interface
+
+[USB2875_290e.NT.Interfaces]
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,%BDACapFilter%,  BDACap2875.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter%,BDATuner2875.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterC%,BDATuner2875-C.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter2%,BDATuner2875-2.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterS%,BDATuner2875-S.Interface
+
+[USB2875_460e.NT.Interfaces]
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,%BDACapFilter%,  BDACap2875.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter%,BDATuner2875.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterC%,BDATuner2875-C.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter2%,BDATuner2875-2.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterS%,BDATuner2875-S.Interface
+
+[BDACap2875.Interface]
+AddReg = BDACap.2875.AddReg
+
+[BDATuner2875.Interface]
+AddReg = BDATuner.2875.AddReg
+
+[BDATuner2875-C.Interface]
+AddReg = BDATunerC.2875.AddReg
+
+[BDATuner2875-2.Interface]
+AddReg = BDATuner2.2875.AddReg
+
+[BDATuner2875-S.Interface]
+AddReg = BDATunerS.2875.AddReg
+
+[BDACap.2875.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDACap.2875.Name%
+HKLM,%Name.Key%,"DSName",0,%BDACap.2875.Name%
+
+
+[BDATuner.2875.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATuner.2875.Name%
+
+[BDATunerC.2875.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATunerC.2875.Name%
+
+[BDATuner2.2875.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATuner2.2875.Name%
+
+[BDATunerS.2875.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATunerS.2875.Name%
+
+[USB2875.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2875
+AddService = USB28xxOEM,0x00000000,OEMInstall2875
+
+[USB2875_290e.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2875
+AddService = USB28xxOEM,0x00000000,OEMInstall2875
+
+[USB2875_460e.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2875
+AddService = USB28xxOEM,0x00000000,OEMInstall2875
+
+[BDAInstall2875]
+DisplayName   = %USB2875.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2875]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+
+
+;---------------------  U S B 2 8 8 1  --------------------
+
+[USB2881.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT
+DelReg	      = OEM.DelReg, UTL.DelReg
+CopyINF      = PCTVEMPA.inf
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2881.NT.CoInstallers]
+CopyFiles     = CoInstaller.CopyFiles
+AddReg        = PCTV320e.CoInstaller.AddReg
+
+;------------ H W ------------
+
+[USB2881.HW]
+AddReg = InstFilter2881
+
+[InstFilter2881]
+HKR,,LowerFilters,0,"emOEM.sys"
+
+[USB2881.NT.HW]
+AddReg = InstFilter2881NT
+
+[InstFilter2881NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+
+;---- I N T E R F A C E S ----
+
+
+[USB2881.NT.Interfaces]
+AddInterface = %KSCATEGORY_VIDEO%,       %WDMCapFilter%,  Capture2881.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     %WDMCapFilter%,  Capture2881.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     %WDMTunerFilter%,TVTuner2881.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     %WDMTVAudFilter%,TVAudio2881.Interface
+AddInterface = %KSCATEGORY_XBAR%,        %WDMXbarFilter%, Xbar2881.Interface
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,%BDACapFilter%,  BDACap2881.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter%,BDATuner2881.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterC%,BDATuner2881.Interface
+
+
+[Capture2881.Interface]
+AddReg = Capture.2881.AddReg
+
+[TVTuner2881.Interface]
+AddReg = TVTuner.2881.AddReg
+
+[TVAudio2881.Interface]
+AddReg = TVAudio.2881.AddReg
+
+[Xbar2881.Interface]
+AddReg = Xbar.2881.AddReg
+
+[BDACap2881.Interface]
+AddReg = BDACap.2881.AddReg
+
+[BDATuner2881.Interface]
+AddReg = BDATuner.2881.AddReg
+
+[Capture.2881.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDACap.2881.Name%
+HKLM,%Name.Key%,"DSName",0,%BDACap.2881.Name%
+
+
+; IAMVideoCompression installed as static interface on both output pins
+HKR,PinFactory\0\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+HKR,PinFactory\1\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+
+[TVTuner.2881.AddReg]
+HKR,,CLSID,,%ProxyTVTuner.CLSID%
+HKR,,FriendlyName,,%TVTuner.2881.Name%
+
+[TVAudio.2881.AddReg]
+HKR,,CLSID,,%ProxyTVAudio.CLSID%
+HKR,,FriendlyName,,%TVAudio.2881.Name%
+
+[Xbar.2881.AddReg]
+HKR,,CLSID,,%ProxyXbar.CLSID%
+HKR,,FriendlyName,,%Xbar.2881.Name%
+
+[BDACap.2881.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDACap.2881.Name%
+
+[BDATuner.2881.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATuner.2881.Name%
+
+[PCTV320e.CoInstaller.AddReg]
+HKR,,CoInstallers32,0x00010000,"PCLECoInst.dll,PCTV320ePostInstallNew"
+
+;------ S E R V I C E S ------
+
+[USB2881.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2881
+AddService = USB28xxOEM,0x00000000,OEMInstall2881
+
+[BDAInstall2881]
+DisplayName   = %USB2881.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2881]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+;---------------------  U S B 2 8 8 3  --------------------
+
+[USB2883.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+;---------------------  U S B 2 8 8 3  PCTV 330e --------------
+
+[USB2883_330]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration, BDA.Installation, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_USB2883_330.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2883_330.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_USB2883_330.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+;------------ H W ------------
+
+[USB2883.HW]
+AddReg = InstFilter2883
+
+[USB2883_330.HW]
+AddReg = InstFilter2883
+
+[InstFilter2883]
+HKR,,LowerFilters,0,"emOEM.sys"
+
+[USB2883.NT.HW]
+AddReg = InstFilter2883NT
+
+[USB2883_330.NT.HW]
+AddReg = InstFilter2883NT
+
+[InstFilter2883NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+
+;---- I N T E R F A C E S ----
+
+[USB2883.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO_QCAP%,		%WDMAudioFilter%,Audio2883.Interface
+AddInterface = %KSCATEGORY_AUDIO%,        %WDMAudioFilter%,Audio2883.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,      %WDMAudioFilter%,Audio2883.Interface
+AddInterface = %KSCATEGORY_VIDEO%,       	%WDMCapFilter%,  Capture2883.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     	%WDMCapFilter%,  Capture2883.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     	%WDMTunerFilter%,TVTuner2883.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     	%WDMTVAudFilter%,TVAudio2883.Interface
+AddInterface = %KSCATEGORY_XBAR%,        	%WDMXbarFilter%, Xbar2883.Interface
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,	%BDACapFilter%,  BDACap2883.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilter%,BDATuner2883.Interface
+
+
+[USB2883_330.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO_QCAP%,	 %WDMAudioFilter%,Audio2883.Interface
+AddInterface = %KSCATEGORY_AUDIO%,       %WDMAudioFilter%,  Audio2883.Interface
+AddInterface = %KSCATEGORY_VIDEO%,       %WDMCapFilter%,  Capture2883.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     %WDMCapFilter%,  Capture2883.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     %WDMTunerFilter%,TVTuner2883.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     %WDMTVAudFilter%,TVAudio2883.Interface
+AddInterface = %KSCATEGORY_XBAR%,        %WDMXbarFilter%, Xbar2883.Interface
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,%BDACapFilter%,  BDACap2883.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilter%,BDATuner2883.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   %BDATunerFilterC%,BDATuner2883.Interface
+
+[Audio2883.Interface]
+AddReg = Audio.2883.AddReg
+
+[Capture2883.Interface]
+AddReg = Capture.2883.AddReg
+
+[TVTuner2883.Interface]
+AddReg = TVTuner.2883.AddReg
+
+[TVAudio2883.Interface]
+AddReg = TVAudio.2883.AddReg
+
+[Xbar2883.Interface]
+AddReg = Xbar.2883.AddReg
+
+[BDACap2883.Interface]
+AddReg = BDACap.2883.AddReg
+
+[BDATuner2883.Interface]
+AddReg = BDATuner.2883.AddReg
+
+[Audio.2883.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Audio.2883.Name%
+
+[Capture.2883.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Cap.2883.Name%
+HKLM,%Name.Key%,"DSName",0,%Cap.2883.Name%
+
+
+; IAMVideoCompression installed as static interface on both output pins
+HKR,PinFactory\0\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+HKR,PinFactory\1\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+
+[TVTuner.2883.AddReg]
+HKR,,CLSID,,%ProxyTVTuner.CLSID%
+HKR,,FriendlyName,,%TVTuner.2883.Name%
+
+[TVAudio.2883.AddReg]
+HKR,,CLSID,,%ProxyTVAudio.CLSID%
+HKR,,FriendlyName,,%TVAudio.2883.Name%
+
+[Xbar.2883.AddReg]
+HKR,,CLSID,,%ProxyXbar.CLSID%
+HKR,,FriendlyName,,%Xbar.2883.Name%
+
+[BDACap.2883.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDACap.2883.Name%
+
+[BDATuner.2883.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATuner.2883.Name%
+
+
+;------ S E R V I C E S ------
+
+[USB2883.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2883
+AddService = USB28xxOEM,0x00000000,OEMInstall2883
+
+[USB2883_330.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2883
+AddService = USB28xxOEM,0x00000000,OEMInstall2883
+
+[BDAInstall2883]
+DisplayName   = %USB2883.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2883]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+
+;---------------------  U S B 2 8 8 5  --------------------
+
+[USB2885.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2885.NT.HW]
+AddReg = InstFilter2885NT
+
+[USB2885_520e.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_520e.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2885_520e.NT.HW]
+AddReg = InstFilter2885NT
+
+[USB2885_802e.NT]
+Include       = ks.inf, kscaptur.inf, ksfilter.inf, bda.inf, wdmaudio.inf
+Needs         = KS.Registration, KSCAPTUR.Registration.NT, BDA.Installation.NT, WDMAUDIO.Registration
+DelReg	      = OEM.DelReg, UTL.DelReg
+AddReg        = CAP.AddReg, OEM.AddReg, OEM.Defaults.AddReg, UTL.AddReg, OEM_802e.AddReg
+CopyFiles     = CAP.CopySYS, CAP.CopyDLL, UTL.CopyList
+
+[USB2885_802e.NT.HW]
+AddReg = InstFilter2885NT
+
+[InstFilter2885NT]
+HKR,,"LowerFilters",0x00010000,"USB28xxOEM"
+
+
+;---- I N T E R F A C E S ----
+
+[USB2885.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO_QCAP%,		%WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_AUDIO%,        %WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,      %WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_VIDEO%,       	%WDMCapFilter%,  Capture2885.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     	%WDMCapFilter%,  Capture2885.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     	%WDMTunerFilter%,TVTuner2885.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     	%WDMTVAudFilter%,TVAudio2885.Interface
+AddInterface = %KSCATEGORY_XBAR%,        	%WDMXbarFilter%, Xbar2885.Interface
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,	%BDACapFilter%,  BDACap2885.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilter%,BDATuner2885.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilterC%,BDATuner2885-C.Interface
+
+[USB2885_520e.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO_QCAP%,		%WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_AUDIO%,        %WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,      %WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_VIDEO%,       	%WDMCapFilter%,  Capture2885.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     	%WDMCapFilter%,  Capture2885.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     	%WDMTunerFilter%,TVTuner2885.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     	%WDMTVAudFilter%,TVAudio2885.Interface
+AddInterface = %KSCATEGORY_XBAR%,        	%WDMXbarFilter%, Xbar2885.Interface
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,	%BDACapFilter%,  BDACap2885.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilter%,BDATuner2885.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilterC%,BDATuner2885-C.Interface
+
+[USB2885_802e.NT.Interfaces]
+AddInterface = %KSCATEGORY_AUDIO_QCAP%,		%WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_AUDIO%,        %WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,      %WDMAudioFilter%,Audio2885.Interface
+AddInterface = %KSCATEGORY_VIDEO%,       	%WDMCapFilter%,  Capture2885.Interface
+AddInterface = %KSCATEGORY_CAPTURE%,     	%WDMCapFilter%,  Capture2885.Interface
+AddInterface = %KSCATEGORY_TVTUNER%,     	%WDMTunerFilter%,TVTuner2885.Interface
+AddInterface = %KSCATEGORY_TVAUDIO%,     	%WDMTVAudFilter%,TVAudio2885.Interface
+AddInterface = %KSCATEGORY_XBAR%,        	%WDMXbarFilter%, Xbar2885.Interface
+AddInterface = %KSCATEGORY_BDA_RECEIVER%,	%BDACapFilter%,  BDACap2885.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilter%,BDATuner2885.Interface
+AddInterface = %KSCATEGORY_BDA_TUNER%,   	%BDATunerFilterC%,BDATuner2885-C.Interface
+
+[Audio2885.Interface]
+AddReg = Audio.2885.AddReg
+
+[Capture2885.Interface]
+AddReg = Capture.2885.AddReg
+
+[TVTuner2885.Interface]
+AddReg = TVTuner.2885.AddReg
+
+[TVAudio2885.Interface]
+AddReg = TVAudio.2885.AddReg
+
+[Xbar2885.Interface]
+AddReg = Xbar.2885.AddReg
+
+[BDACap2885.Interface]
+AddReg = BDACap.2885.AddReg
+
+[BDATuner2885.Interface]
+AddReg = BDATuner.2885.AddReg
+
+[BDATuner2885-C.Interface]
+AddReg = BDATunerC.2885.AddReg
+
+[Audio.2885.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Audio.2885.Name%
+
+[Capture.2885.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%Cap.2885.Name%
+HKLM,%Name.Key%,"DSName",0,%Cap.2885.Name%
+
+
+; IAMVideoCompression installed as static interface on both output pins
+HKR,PinFactory\0\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+HKR,PinFactory\1\Interfaces\{C6E13343-30AC-11d0-A18C-00A0C9118956},,,{C6E13343-30AC-11d0-A18C-00A0C9118956}
+
+[TVTuner.2885.AddReg]
+HKR,,CLSID,,%ProxyTVTuner.CLSID%
+HKR,,FriendlyName,,%TVTuner.2885.Name%
+
+[TVAudio.2885.AddReg]
+HKR,,CLSID,,%ProxyTVAudio.CLSID%
+HKR,,FriendlyName,,%TVAudio.2885.Name%
+
+[Xbar.2885.AddReg]
+HKR,,CLSID,,%ProxyXbar.CLSID%
+HKR,,FriendlyName,,%Xbar.2885.Name%
+
+[BDACap.2885.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDACap.2885.Name%
+
+[BDATuner.2885.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATuner.2885.Name%
+
+[BDATunerC.2885.AddReg]
+HKR,,CLSID,,%ProxyVCap.CLSID%
+HKR,,FriendlyName,,%BDATunerC.2885.Name%
+
+
+;------ S E R V I C E S ------
+
+[USB2885.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2885
+AddService = USB28xxOEM,0x00000000,OEMInstall2885
+
+[USB2885_520e.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2885
+AddService = USB28xxOEM,0x00000000,OEMInstall2885
+
+[USB2885_802e.NT.Services]
+AddService = USB28xxBGA,0x00000002,BDAInstall2885
+AddService = USB28xxOEM,0x00000000,OEMInstall2885
+
+[BDAInstall2885]
+DisplayName   = %USB2885.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emBDA.sys
+
+[OEMInstall2885]
+DisplayName   = %OEM.DeviceDesc%
+ServiceType   = 1		;SERVICE_KERNEL_DRIVER
+StartType     = 3		;SERVICE_DEMAND_START
+ErrorControl  = 1		;SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\emOEM.sys
+
+
+
+
+
+
+;---------------------  C O M M O N  ----------------------
+
+[CAP.AddReg]
+HKR,,HardwareConfig,1,1
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,emBDA.sys
+
+; IBDA2800CustomProp
+
+
+
+
+HKCR,CLSID\{846A4C4E-76D8-42ec-A333-121F365A4DA8},,,%CustomPlugIn%
+HKCR,CLSID\{846A4C4E-76D8-42ec-A333-121F365A4DA8}\InprocServer32,,,emPRP.ax
+HKCR,CLSID\{846A4C4E-76D8-42ec-A333-121F365A4DA8}\InprocServer32,ThreadingModel,,Both
+
+; This IID is aggregated for the filter given the CLSID of the property set
+HKLM,System\CurrentControlSet\Control\MediaInterfaces\{846A4C4E-76D8-42ec-A333-121F365A4DA8},,,%CustomPlugIn%
+HKLM,System\CurrentControlSet\Control\MediaInterfaces\{846A4C4E-76D8-42ec-A333-121F365A4DA8},IID,1,4e,4c,6A,84, d8,76, ec,42, 0xa3, 0x33, 0x12, 0x1f, 0x36, 0x5a, 0x4d, 0xa8
+
+; Video Image Property Page
+
+
+
+
+HKCR,CLSID\{7F229794-410B-4e67-B492-4C80C2843871},,,%CustomPropPage%
+HKCR,CLSID\{7F229794-410B-4e67-B492-4C80C2843871}\InprocServer32,,,emPRP.ax
+HKCR,CLSID\{7F229794-410B-4e67-B492-4C80C2843871}\InprocServer32,ThreadingModel,,Both
+
+; Associate property set with property page
+HKLM,System\CurrentControlSet\Control\MediaSets\{846A4C4E-76D8-42ec-A333-121F365A4DA8}\PropertyPages\{7F229794-410B-4e67-B492-4C80C2843871},,,%CustomPropPage%
+
+; Audio Pin Names
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%PINNAME_AUDIOIN%,Name,,%Pinname.AudioIN%
+HKLM,SYSTEM\CurrentControlSet\Control\MediaCategories\%PINNAME_AUDIOOUT%,Name,,%Pinname.AudioOUT%
+
+
+[CAP.CopyDLL]
+emPRP.ax
+
+[CAP.CopySYS]
+emBDA.sys
+emOEM.sys
+merlinFW.rom
+
+[CoInstaller.CopyFiles]
+PCLECoInst.dll,,,0x00000004
+
+
+;---------------------  U T I L ---------------------------
+
+[UTL.DelReg]
+HKLM, %AUTORUN%, emMON
+
+[UTL.AddReg]
+;HKLM, %AUTORUN%, emMON,,"emMON.exe"
+
+[UTL.CopyList]
+emMON.exe
+
+
+;-------------------------  O E M  ------------------------
+
+[OEM_USB2875.AddReg]
+
+
+[OEM_290e.AddReg]
+HKR,settings\OEMSettings,GPIODefault,0x00010001,0x00 ; LED on only with activ graph not during USB plug-in
+
+; Sony CXD 2820R
+HKR,settings\OEMSettings,CXD2820T2ScanInterval,0x00010001,550
+HKR,settings\OEMSettings,CXD2820T2SpectrumDetection,0x00010001,1      ;0=Disable, 1=Enable
+HKR,settings\OEMSettings,CXD2820ModeSelection,0x00010001,2            ;0=DVB-T only, 1=DVB-T2 only, 2=auto
+HKR,settings\OEMSettings,CXD2820LNAThreshold,0x00010001, 9            ;0-15
+HKR,settings\OEMSettings,CXD2820AcqTimeoutT,0x00010001,450
+HKR,settings\OEMSettings,CXD2820AcqTimeoutT2,0x00010001,5000
+HKR,settings\OEMSettings,CXD2820TuneCurrentStandardFirst,0x00010001,0 ;0=Disable, 1=Enable
+
+
+[OEM_USB2883_330.AddReg]
+HKR,settings\OEMSettings,AMDEMOD,0x00010001,6           ; PCTV 330e
+
+[OEM_460e.AddReg]
+; NXP Falcon 
+HKR,settings\OEMSettings,GPIODefault,0x00010001,0x01    ;Demod reset held low at power-up
+HKR,settings\OEMSettings,LNBDCBoost,0x00010001,0        ;0=13/18v, 1=14/19v
+HKR,settings\OEMSettings,NXPEnableADVAuto,0x00010001,1  ;0=Disable, 1=Enable
+HKR,settings\OEMSettings,NXPEnableDVBSAuto,0x00010001,1 ;0=Disable, 1=Enable
+HKR,settings\OEMSettings,NXPAcqAttemptS,0x00010001,1 
+HKR,settings\OEMSettings,NXPAcqAttemptS2,0x00010001,1
+HKR,settings\OEMSettings,NXPAcqTimeoutS,0x00010001,250
+HKR,settings\OEMSettings,NXPAcqTimeoutS2,0x00010001,600
+HKR,settings\OEMSettings,NXPDiseqTimeGap,0x00010001,30
+HKR,settings\OEMSettings,NXPInitRetry,0x00010001,2
+HKR,settings\OEMSettings,NXPFWCheck,0x00010001,1
+HKR,settings\OEMSettings,NXPIgnoreFWCRCCheck,0x00010001,0
+
+[OEM_520e.AddReg]
+HKR,settings\OEMSettings,GPIODefault,0x00010001,0x10 ; LED on only with activ graph not during USB plug-in
+
+[OEM_802e.AddReg]
+HKR,settings\OEMSettings,GPIODefault,0x00010001,0x10 ; LED on only with activ graph not during USB plug-in
+
+[OEM.DelReg]
+HKR,settings\OEMSettings
+
+[OEM.AddReg]
+; The sub-section below adds the driver configurations, regardless of
+; EEPROM's presence. These configurations are not specified in EEPROM.
+;
+; =====  BEGIN  =====
+;
+HKR,settings\OEMSettings,Optimization,0x00010001,1      ; 1=ISO, 2=Bulk
+HKR,settings\OEMSettings,FixUpOWC,0x00010001,12         ;
+HKR,settings\OEMSettings,FixUpATI,0x00010001,0          ; 1=enabled for multiple root hubs
+HKR,settings\OEMSettings,EnablePAL640x576,0x00010001,0  ; For 2820/2840
+HKR,settings\OEMSettings,XceiveMTS,0x00010001,0         ; XC3028 Baseband Audio
+;;;HKR,settings\OEMSettings,EnableAudioPin,0x00010001,0 ; 0=Disable
+;;;HKR,settings\OEMSettings,OemID,0x00010001,0          ;
+;;;HKR,settings\OEMSettings,BufferCount,0x00010001,16   ; for CAP/VBI
+;;;HKR,settings\OEMSettings,BufferCountTS,0x00010001,16 ; for TS
+;;;HKR,settings\OEMSettings,BufferCountAudio,0x10001,16 ; for Audio
+;;;HKR,settings\OEMSettings,StrictHeader,0x00010001,0   ;
+;;;HKR,settings\OEMSettings,PowerControl,0x00010001,0   ;
+;;;HKR,settings\OEMSettings,MaximumSS,0x00010001,32     ; Max Signal Strength
+;;;HKR,settings\OEMSettings,XC5000FMInput,0x00010001,0  ; 1=RF1, 2=RF2
+;;;HKR,settings\OEMSettings,NXP18271FMInput,0x00010001,9; 1=RF1, 2=RF2
+;;;HKR,settings\OEMSettings,NXP18271FMThreshold,0x00010001,0x0fffff;
+
+
+; Additional delay required before reading Freq Offset (ms).
+;;;HKR,settings\OEMSettings,FreqOffsetDelay,0x00010001,0
+
+; AC97 source balance adjustments - valid range 0..127
+;;;HKR,settings\OEMSettings,AC97VolumeTV,0x00010001,64  ;
+;;;HKR,settings\OEMSettings,AC97VolumeFM,0x00010001,64  ;
+;;;HKR,settings\OEMSettings,AC97VolumeLN,0x00010001,64  ; Line IN
+
+; Demod AGC Target
+;;;HKR,settings\OEMSettings,AGCTarget6_352,0x00010001,40; 352, 6 MHz
+;;;HKR,settings\OEMSettings,AGCTarget7_352,0x00010001,40; 352, 7 MHz
+;;;HKR,settings\OEMSettings,AGCTarget8_352,0x00010001,40; 352, 8 MHz
+;;;HKR,settings\OEMSettings,AGCTarget6_353,0x00010001,49; 353, 6 MHz
+;;;HKR,settings\OEMSettings,AGCTarget7_353,0x00010001,49; 353, 7 MHz
+;;;HKR,settings\OEMSettings,AGCTarget8_353,0x00010001,49; 353, 8 MHz
+
+; VBI Parameters
+;;;HKR,settings\OEMSettings,VBIMinStart,0x00010001,454
+;;;HKR,settings\OEMSettings,VBIMaxStart,0x00010001,1000
+;;;HKR,settings\OEMSettings,VBIActualStart,0x00010001,950
+;;;HKR,settings\OEMSettings,VBIActualEnd,0x00010001,6373
+
+; DAT Threshold
+;;;HKR,settings\OEMSettings,DATThreshold352,0x00010001,60
+;;;HKR,settings\OEMSettings,DATThreshold353,0x00010001,60
+
+; QT1010 LNA & PCB Options
+HKR,settings\OEMSettings,QT1010LNA,0x00010001,0         ; 1=enabled
+HKR,settings\OEMSettings,QT1010V3,0x00010001,1          ; 0/1/2/3
+
+; GPIO for AM DEMOD
+HKR,settings\OEMSettings,AMDEMOD,0x00010001,2           ; 2=GPIO2, 6=GPIO6
+
+; DRXJ IF Level Threshold
+HKR,settings\OEMSettings,DRXJIFLevelThreshold,0x00010001,0
+
+; DRX Osc clock
+HKR,settings\OEMSettings,DRXosc,0x00010001,12000        ; Osc clock
+
+; GPIO5 Polarity
+HKR,settings\OEMSettings,GPIO5Polarity,0x00010001,0     ; 1=go thru inverter
+
+; ATSC Default Mode
+HKR,settings\OEMSettings,ATSCMode,0x00010001,0          ; 0=VSB8, 1=QAM64, 2=QAM256
+
+; MCE
+HKR,settings\OEMSettings,IsMCE,0x00010001,2             ; 1=MCE, 0=non-MCE,2=use EEPROM setting
+
+; 80e LNA Default Setting
+HKR,settings\OEMSettings,J4atsc,0x00010001,0          ; ATSC :: 0=OFF, 1=ON, 2=auto
+HKR,settings\OEMSettings,J4qam,0x00010001,0           ; CQAM :: 0=OFF, 1=ON, 2=auto
+
+
+;;;HKLM,SYSTEM\CurrentControlSet\Services\USB28xxBGA\Settings\OEM,MVBroadcast,0x00010001,0
+
+; For 2nd instance of anolog video ONLY
+;;;HKR,settings\OEMSettings,MaxRawFormat,0x00010001,16  ;max bpp allowed
+;;;HKR,settings\OEMSettings,EnableVBI2,0x00010001,1     ;default = EnableVBI1
+
+HKR,settings\OEMSettings,DVBTorDVBC,0x00010001,1        ; 0:DVBC 1:DVBT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; =====   END   =====
+
+
+; The following configurations are only needed if EEPROM is not present.
+;
+; =====  BEGIN  =====
+;
+;        -----  Board Configurations   -----
+HKR,settings\OEMSettings,Composite,0x00010001,1         ; Composite Input
+HKR,settings\OEMSettings,SVideo,0x00010001,1            ; S-Video Input
+HKR,settings\OEMSettings,SonyOnBoard,0x00010001,0       ; Sony Modules
+
+;        -----  Driver Configurations  -----
+HKR,settings\OEMSettings,StrictI2cAccess,0x00010001,0   ; 0=Normal, 1=Strict
+HKR,settings\OEMSettings,VideoSwitchMode,0x00010001,1   ; 0=Freeze, 1=Blackout
+HKR,settings\OEMSettings,EnableSquarePixel,0x00010001,1 ; 1=enabled
+HKR,settings\OEMSettings,Enable704,0x00010001,0         ; 1=enabled
+HKR,settings\OEMSettings,DSFineTune,0x00010001,1        ; 1=enabled
+HKR,settings\OEMSettings,GPIObyAP,0x00010001,0          ;
+HKR,settings\OEMSettings,TVTuneByAP,0x00010001,0        ;
+;HKR,settings\OEMSettings,PowerOffIfIdle,0x00010001,0   ; 0=disable, 1=enable, 2=use EEPROM setting
+
+;        ----- OEM Devices Accessed from Applications Directly  -----
+HKR,settings\OEMSettings,Oem0I2C,0x00010001,0x60
+HKR,settings\OEMSettings,Oem0Type,0x00010001,2
+HKR,settings\OEMSettings,Oem1I2C,0x00010001,0x60
+HKR,settings\OEMSettings,Oem1Type,0x00010001,2
+HKR,settings\OEMSettings,Oem2I2C,0x00010001,0x60
+HKR,settings\OEMSettings,Oem2Type,0x00010001,2
+HKR,settings\OEMSettings,Oem3I2C,0x00010001,0x60
+HKR,settings\OEMSettings,Oem3Type,0x00010001,2
+
+;        ----- Tuner CFG & Overrides  -----
+;;;HKR,settings\OEMSettings,TunerIDBase,0x00010001,0
+;;;HKR,settings\OEMSettings,TunerID7,0x00010001,21      ;CFG7 = SAM9082
+
+;       ----- USB/Ext Audio Mux for 2820/2840 Only  -----
+;;;HKR,settings\OEMSettings,USBAudioMux,0x00010001,1
+;;;HKR,settings\OEMSettings,ExtAudioMux,0x00010001,2
+
+; =====   END   =====
+
+
+; This section provides property defaults for the BDA driver.
+;
+; If EEPROM is on board, some of these property defaults are provided
+; by EEPROM. The remaining perperty defaults are specified here.
+;
+; A property default is only meaningful if the corresponding property
+; is not yet defined in the system registry.
+;
+[OEM.Defaults.AddReg]
+HKR,settings\PropDefaults,Brightness,0x00010001,128     ;
+HKR,settings\PropDefaults,Contrast,0x00010001,32        ;
+HKR,settings\PropDefaults,Hue,0x00010001,64             ;
+HKR,settings\PropDefaults,Saturation,0x00010001,32      ;
+HKR,settings\PropDefaults,Sharpness,0x00010001,2        ;
+HKR,settings\PropDefaults,Gamma,0x00010001,50           ;
+
+HKR,settings\PropDefaults,Mirror,0x00010001,0           ; 0=OFF, 1=ON
+HKR,settings\PropDefaults,Flip,0x00010001,0             ; 0=OFF, 1=ON
+HKR,settings\PropDefaults,AutoExposure,0x00010001,1     ; 0=OFF, 1=ON
+HKR,settings\PropDefaults,AEMode,0x00010001,1           ; 0=Dark, 1=Normal
+HKR,settings\PropDefaults,AE_Level,0x00010001,3         ; Target AE (0-6)
+HKR,settings\PropDefaults,Exposure,0x00010001,4         ;
+HKR,settings\PropDefaults,LightTemperature,0x00010001,0 ;
+HKR,settings\PropDefaults,LightFreq,0x00010001,0        ; 0=60Hz, 1=50Hz
+HKR,settings\PropDefaults,AutoWhiteBalance,0x00010001,1 ; 0=OFF , 1=ON
+HKR,settings\PropDefaults,AWB_R,0x00010001,32           ;
+HKR,settings\PropDefaults,AWB_B,0x00010001,32           ;
+HKR,settings\PropDefaults,WindowSize,0x00010001,0       ; 0=640x480, 1=320x240, 2=1280x960
+HKR,settings\PropDefaults,MonitorType,0x00010001,0      ; 0=CRT,  1=LCD
+HKR,settings\PropDefaults,Volume,0x00010001,0           ;
+
+HKR,settings\PropDefaults,VideoStandard,0x00010001,1    ; 1=NTSC, 0x10=PAL_B, 0x40000=SECAM_L
+HKR,settings\PropDefaults,Deinterlace,0x00010001,1      ; 1=Weave, 2=Bob
+HKR,settings\PropDefaults,VCRMask,0x00010001,0          ; # of lines masked out
+HKR,settings\PropDefaults,MaskColor,0x00010001,1        ; 0=Gray, 1=Black
+
+
+
+;--------------------- S T R I N G S -----------------------
+
+
+
+[Strings]
+;---------------
+;Non-Localizable
+;---------------
+KSCATEGORY_AUDIO_QCAP   = "{33D9A762-90C8-11D0-BD43-00A0C911CE86}"
+KSCATEGORY_AUDIO        = "{6994AD04-93EF-11D0-A3CC-00A0C9223196}"
+KSCATEGORY_VIDEO        = "{6994AD05-93EF-11D0-A3CC-00A0C9223196}"
+KSCATEGORY_CAPTURE      = "{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
+KSCATEGORY_TVTUNER      = "{a799a800-a46d-11d0-a18c-00a02401dcd4}"
+KSCATEGORY_TVAUDIO      = "{a799a802-a46d-11d0-a18c-00a02401dcd4}"
+KSCATEGORY_XBAR         = "{a799a801-a46d-11d0-a18c-00a02401dcd4}"
+KSCATEGORY_BDA_RECEIVER = "{FD0A5AF4-B41D-11d2-9C95-00C04F7971E0}"
+KSCATEGORY_BDA_TUNER    = "{71985F48-1CA1-11d3-9CC8-00C04F7971E0}"
+
+ProxyVCap.CLSID         = "{17CCA71B-ECD7-11D0-B908-00A0C9223196}"
+ProxyTVTuner.CLSID      = "{266EEE40-6C63-11cf-8A03-00AA006ECB65}"
+ProxyTVAudio.CLSID      = "{71F96462-78F3-11d0-A18C-00A0C9118956}"
+ProxyXbar.CLSID         = "{71F96460-78F3-11d0-A18C-00A0C9118956}"
+
+WDMAudioFilter          = "{8DBF1283-572E-4b01-BFCC-14CFEB772501}"
+WDMCapFilter            = "{54353D15-E717-4d94-B574-685CE1A209E9}"
+WDMTunerFilter          = "{12AF27FC-0911-461f-B190-D31117E603D0}"
+WDMTVAudFilter          = "{08D111EA-EE84-4ddc-99B5-8885C6C64FCB}"
+WDMXbarFilter           = "{C2C9FB1B-795C-4b12-ADBE-D87C6A1D08FC}"
+BDACapFilter            = "{BC102ACB-6095-451d-8ED6-16CF3C832EBC}"
+BDATunerFilter          = "{7C8095AB-C110-40e5-9F4D-310858BBBF64}"
+BDATunerFilterC         = "{B50B8116-DA24-4f97-80D1-00451702C5F7}"
+BDATunerFilterS         = "{54FB4E45-D668-4d9f-BCBA-B257E8AFF339}"
+BDATunerFilter2         = "{510162D9-2F7E-49e7-907B-DBD3A5A15EB9}"
+BDATunerFilterS-2	= "{5B7BAE7B-17C9-4329-83D6-21436FE548FC}"
+
+PINNAME_AUDIOIN         = "{78BA1331-8888-4246-BA66-232430A6A8B7}"
+PINNAME_AUDIOOUT        = "{8E09372B-3FC8-47c9-B1D3-1DF12A7817FC}"
+
+Name.Key                = "Software\USB2800\BDA"
+
+CustomPlugIn            = "emPRP Custom Interface"
+CustomPropPage          = "emPRP Custom Property Page"
+
+AUTORUN                 = "Software\Microsoft\Windows\CurrentVersion\Run"
+
+
+
+;---------------
+;Localizable
+;---------------
+Vendor             = "PCTV Systems"
+DiskLabel          = "PCTV EMP Driver Disk"
+OEM.DeviceDesc     = "USB 28xx OEM Filter"
+Pinname.AudioIN    = "Analog Audio In"
+Pinname.AudioOUT   = "Audio"
+
+PCTV100e.DeviceDesc = "PCTV 100e/150e"
+USB2821.DeviceDesc = "PCTV 100e/150e Device"
+Cap.2821.Name      = "PCTV 100e/150e WDM 2821 Capture"
+TVTuner.2821.Name  = "PCTV 100e/150e WDM 2821 TVTuner"
+TVAudio.2821.Name  = "PCTV 100e/150e WDM 2821 TVAudio"
+Xbar.2821.Name     = "PCTV 100e/150e WDM 2821 Crossbar"
+
+PCTV170e.DeviceDesc = "PCTV 170e"
+USB2865.DeviceDesc = "PCTV 170e Device"
+BDACap.2865.Name   = "PCTV 170e BDA Capture"
+BDATuner.2865.Name = "PCTV 170e BDA TVTuner"
+Cap.2865.Name      = "PCTV 170e WDM 2865 Capture"
+Audio.2865.Name    = "PCTV 170e WDM 2865 Audio"
+TVTuner.2865.Name  = "PCTV 170e WDM 2865 TVTuner"
+TVAudio.2865.Name  = "PCTV 170e WDM 2865 TVAudio"
+Xbar.2865.Name     = "PCTV 170e WDM 2865 Crossbar"
+
+PCTV70e.DeviceDesc = "PCTV 70e"
+USB2870.DeviceDesc = "PCTV 70e Device"
+BDACap.2870.Name   = "PCTV 70e BDA 2870 Capture"
+BDATuner.2870.Name = "PCTV 70e BDA 2870 TVTuner"
+
+PCTV80e.DeviceDesc = "PCTV 80e"
+PCTV80eSE.DeviceDesc = "PCTV 80e SE"
+PCTV290e.DeviceDesc = "PCTV 290e"
+PCTV460e.DeviceDesc = "PCTV 460e"
+USB2875.DeviceDesc = "PCTV 80e/290e/460e Device"
+BDATunerS.2875.Name= "PCTV 80e/290e/460e TVTuner S"
+BDACap.2875.Name   = "PCTV 80e/290e/460e BDA 2875 Capture"
+BDATuner.2875.Name = "PCTV 80e/290e/460e BDA 2875 TVTuner"
+BDATunerC.2875.Name= "PCTV 80e/290e/460e BDA 2875 TVTuner C"
+BDATuner2.2875.Name= "PCTV 80e/290e/460e BDA 2875 TVTuner 2"
+
+PCTV320e.DeviceDesc = "PCTV 320e"
+USB2881.DeviceDesc = "PCTV 320e Device"
+TVTuner.2881.Name  = "PCTV 320e WDM 2881 TVTuner"
+TVAudio.2881.Name  = "PCTV 320e WDM 2881 TVAudio"
+Xbar.2881.Name     = "PCTV 320e WDM 2881 Crossbar"
+BDACap.2881.Name   = "PCTV 320e BDA 2881 Capture"
+BDATuner.2881.Name = "PCTV 320e BDA 2881 TVTuner"
+
+PCTV330e.DeviceDesc = "PCTV 330e"
+PCTV800e.DeviceDesc = "PCTV 800e"
+PCTV880e.DeviceDesc = "PCTV 880e"
+USB2883.DeviceDesc = "PCTV 330e/800e/880e Device"
+Cap.2883.Name      = "PCTV 330e/800e/880e WDM 2883 Capture"
+Audio.2883.Name    = "PCTV 330e/800e/880e WDM 2883 Audio"
+TVTuner.2883.Name  = "PCTV 330e/800e/880e WDM 2883 TVTuner"
+TVAudio.2883.Name  = "PCTV 330e/800e/880e WDM 2883 TVAudio"
+Xbar.2883.Name     = "PCTV 330e/800e/880e WDM 2883 Crossbar"
+BDACap.2883.Name   = "PCTV 330e/800e/880e BDA 2883 Capture"
+BDATuner.2883.Name = "PCTV 330e/800e/880e BDA 2883 TVTuner"
+
+PCTV380e.DeviceDesc = "PCTV 380e"
+PCTV510e.DeviceDesc = "PCTV 510e"
+PCTV520e.DeviceDesc = "PCTV 520e"
+PCTV802e.DeviceDesc = "PCTV 802e"
+USB2885.DeviceDesc  = "PCTV 510e Device"
+Cap.2885.Name      = "PCTV 510e/520e/802e WDM 2885 Capture"
+Audio.2885.Name    = "PCTV 510e/520e/802e WDM 2885 Audio"
+TVTuner.2885.Name  = "PCTV 510e/520e/802e WDM 2885 TVTuner"
+TVAudio.2885.Name  = "PCTV 510e/520e/802e WDM 2885 TVAudio"
+Xbar.2885.Name     = "PCTV 510e/520e/802e WDM 2885 Crossbar"
+BDACap.2885.Name   = "PCTV 510e/520e/802e BDA 2885 Capture"
+BDATuner.2885.Name = "PCTV 510e/520e/802e BDA 2885 TVTuner"
+BDATunerC.2885.Name= "PCTV 510e/520e/802e BDA 2885 TVTuner C"
+
