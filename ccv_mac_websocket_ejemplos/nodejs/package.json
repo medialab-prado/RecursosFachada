@@ -13,6 +13,6 @@
     "express": "^3.18.3",
     "expresss": "0.0.0",
     "node-osc": "^3.0.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.4.0"
   }
 }
