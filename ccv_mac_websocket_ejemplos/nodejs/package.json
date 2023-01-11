@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "connect-form": "^0.2.1",
-    "express": "^3.18.3",
+    "express": "^4.18.2",
     "expresss": "0.0.0",
     "node-osc": "^3.0.0",
     "socket.io": "^2.2.0"
